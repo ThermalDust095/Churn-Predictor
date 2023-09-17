@@ -1,33 +1,258 @@
-<html>
-<head>
-    <title>Customer Churn Predictor</title>
-</head>
+    <html>
+    <head>
+        <title>Churn Predictor</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Kanit:ital,wght@0,600;1,500&family=Noto+Sans:ital,wght@0,500;1,300&family=Poppins:wght@400;500;600;700&family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
 
-<body>
-    <div>
-        <h1>Please Choose a model</h1>
+        <style>
 
-        <form method="get" action="/dtree">
-            <label for="Age">Age:</label><br>
-            <input type="text" id="age" name="age"><br>
+            body{
+                margin: 0;
+                min-height: 100vh;
+                width: 100%;
+                background: #D2CACA;
+                font-family: Inter;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
 
-            <label for="Gender">Gender:</label><br>
-            <input type="text" id="gender" name="gender"><br>
+                display: flex;
+
+                justify-content: center;
+                align-items: center;
+            }
             
-            <label for="Location">Location:</label><br>
-            <input type="text" id="location" name="location"><br>
+            #pred {
+                display: flex;
+                height: 738px;
+                width: 879px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.70);
+                box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25)
+            }
+
+            #stuff{
+                /* justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                gap: 40px; */
+
+                position: relative;
+                left:100px;
+                top: 10px;
+            }
+
+            #pred h1{
+                position: absolute;
+                top: 3px;
+                width: 500px;
+                left: 567px;
+            }
+
+            #pred form{
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                gap: 12px;
+
+                position: relative;
+                top: 123px;
+                left: 0px;
+            }
+
+            #pred form input{
+                width: 683px;
+                height: 46px;
+                border-radius: 21px;
+                border: 3px solid #616993;
+                background: #F0E9E9
+            }
+
+            #pred form input[type="text"]{
+                font-family: Inter;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+                font-size: 20px;
+                padding-left: 10px;
+
+            }
+
+            select, 
+            select option {
+            font-size: 20px;
+            background-color: #F0E9E9;
+            border: 3px solid #616993;
+            border-radius: 5px;
+            width: 683px;
+            height: 46px;
+
+                font-family: Inter;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+
+            #model-sel{
+                display: flex;
+                flex-direction: row;
+                gap: 80px;
+                list-style-type: none;
+
+                position: relative;
+                top: 94px;
+                left: 10px;
+                
+            }
+
+            #model-sel li{
+                border: 2px solid #3A6AA3;
+                padding:    5px 5px 5px 5px;
+                transition: 0.2s;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            #model-sel li:hover{
+                cursor: pointer;
+                background-color: #3A6AA3;
+                color: #fff;
+            }
+
+            #pred h2{
+                position: absolute;
+                bottom: 3px;
+                left: 580px;
+                color: #3A6AA3;
+            }
+
+            #submit{
+                cursor: pointer;
+                font-family: Inter;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+                font-size: 20px;
+                transition: 0.2s;
+            }
+
+            #submit:hover{
+                background-color: #3A6AA3;
+                color: #fff;
+            }
             
-            <label for="Bill">Bill:</label><br>
-            <input type="text" id="bill" name="bill"><br>
+
+
+        </style>
+
+    </head>
+
+    <body>
+        <div id= "pred">
+            <h1>Customer Churn Predictor</h1>
+
+            <div id="stuff">
+
+            <ul id="model-sel">
+                <li value="lr">LR</li>
+                <li value="dtree">Dtree</li>    
+                <li value="nn">Neural Network</li>
+                <li value="rfc">Random Forest</li>
+            </ul>
+
+            <form>
+                <input type="text" id="age" name="age" placeholder="Age: ">
+
+                <label for="gender">Gender: </label>
+                <select id="gender" name="location">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>  
+                </select>
+                
+                <label for="location">Location: </label>
+                <select id="location" name="location">
+                    <option value="Los Angeles">Los Angeles</option>
+                    <option value="New York">New York</option>  
+                    <option value="Miami">Miami</option>
+                    <option value="Chicago">Chicago</option>
+                    <option value="Houston">Houston</option>
+                </select>
+                
+                <input type="text" id="bill" name="bill" placeholder="Bill:">
+                
+                <input type="text" id="subLen" name="sub-len" placeholder="Subscription Length: ">
+                
+                <input type="text" id="totalGB" name="total-gb" placeholder="Total GB Used: ">
+                
+                <input type="submit" id="submit" value="Submit">
+                
+                </form>    
+                
+                
+            </div>
+
+            <h2 id="result"></h2>
             
-            <label for="sub-len">Subscription Length:</label><br>
-            <input type="text" id="sub-len" name="sub-len"><br>
+        </div>
+
+        <script src="{{ url_for('static', filename='jquery.js')}}"></script>
+        <script>
+            var $ = jQuery.noConflict();
+
+            var model;
+
+            $("#submit").click(function(e) {
+                e.preventDefault();
+                console.log("submit");
+                
+                var data = {
+                    age: $("#age").val(),
+                    gender: $("#gender").val(),
+                    location: $("#location").val(),
+                    bill: $("#bill").val(),
+                    subLen: $("#subLen").val(),
+                    totalGB: $("#totalGB").val(),
+
+                }
+                console.log(model)
+                console.log(data)
+
+                $.ajax({
+					url: `/${model}`,
+                    dataType: 'json',
+                    contentType: 'application/json',
+					data: JSON.stringify(data),
+					method: "POST",
+					success: function (data) {
+						console.log(data);
+
+                        if(data.result == '0'){
+                            $("#result").html("The customer will not continue..")
+                        }
+
+                        if(data.result == '1'){
+                            $("#result").html("The customer will continue..")
+                        }
+					},
+					error: function (x) {
+						console.log(x);
+					}
+				})
+            });
+
+
+            $("#model-sel li").click(function(e){
+
+                console.log($(this).attr('value'))
+                model = $(this).attr('value')
+                $("#model-sel li").css('background-color','#fff')
+                $("#model-sel li").css('color','#000')
+                $(this).css('background-color','#3A6AA3')
+                $(this).css('color','#fff')
+            })
             
-            <label for="total-gb">Total Usage (GB):</label><br>
-            <input type="text" id="total-gb" name="total-gb"><br>
-            
-            <input type="submit" value="Submit"><br><br>
-        </form>      
-    </div>
-</body>
-</html>
+
+        </script>
+    </body>
+    </html>
